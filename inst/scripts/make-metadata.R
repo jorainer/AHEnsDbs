@@ -1,5 +1,5 @@
 ## Collect all metadata from EnsDb sqlite files located in a specific folder.
-sqliteUrl <- "/Users/jo/Projects/EnsDbs/ensembl-87"
+sqliteUrl <- "/Users/jo/Projects/EnsDbs/"
 require(ensembldb, quietly = TRUE)
 
 .formatOrgName <- function(x) {
@@ -13,30 +13,35 @@ require(ensembldb, quietly = TRUE)
     mtd <- metadata(EnsDb(x))
     orgn <- .formatOrgName(mtd[mtd$name == "Organism", "value"])
     ever <- mtd[mtd$name == "ensembl_version", "value"]
-    vals <- data.frame(Title = paste0("EnsDb for ", orgn, ", Ensembl ", ever),
-                       Description = paste0("Gene and protein annotations for ",
-                                            orgn, " based on Ensembl version ",
-                                            ever, "."),
-                       BiocVersion = "3.4",
-                       Genome = mtd[mtd$name == "genome_build", "value"],
-                       SourceType = "MySQL",
-                       SourceUrl = "http://www.ensembl.org",
-                       SourceVersion = ever,
-                       Species = orgn,
-                       TaxonomyId = NA_character_,    ## fix me
-                       Coordinate_1_based = TRUE,   ## fix me
-                       DataProvider = "Ensembl",
-                       Maintainer = "Johannes Rainer <johannes.rainer@eurac.edu>",
-                       RDataClass = "SQLiteFile",
-                       DispatchClass = "EnsDb",
-                       ResourceName = basename(x),
-                       Tags = I(list(c("EnsDb", "Ensembl", "Gene", "Transcript",
-                                       "Protein", "Annotation", ever)))
-                       )
+    taxo <- mtd[mtd$name == "taxonomy_id", "value"]
+       vals <- data.frame(
+    ## vals <- AnnotationHubData::AnnotationHubMetadata(
+        Title = paste0("Ensembl ", ever, " EnsDb for ", orgn),
+        Description = paste0("Gene and protein annotations for ",
+                             orgn, " based on Ensembl version ",
+                             ever, "."),
+        BiocVersion = "3.4",
+        Genome = mtd[mtd$name == "genome_build", "value"],
+        SourceType = "MySQL",
+        SourceUrl = "http://www.ensembl.org",
+        SourceVersion = ever,
+        Species = orgn,
+        TaxonomyId = taxo,
+        Coordinate_1_based = TRUE,
+        DataProvider = "Ensembl",
+        Maintainer = "Johannes Rainer <johannes.rainer@eurac.edu>",
+        RDataClass = "SQLiteFile",
+        DispatchClass = "EnsDb",
+        ## RDataDateAdded = as.POSIXct(Sys.time()),
+        ResourceName = basename(x),
+        Recipe = NA_character_,
+        Tags = I(list(c("EnsDb", "Ensembl", "Gene", "Transcript",
+                        "Protein", "Annotation", ever)))
+    )
     return(vals)
 }
 
-fls <- dir(sqliteUrl, full.names = TRUE)
+fls <- dir(sqliteUrl, full.names = TRUE, pattern = "^EnsDb(.*)sqlite$")
 
 meta <- lapply(fls, FUN = .metadataForEnsDb)
 meta <- do.call(rbind, meta)
