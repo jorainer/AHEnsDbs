@@ -1,5 +1,24 @@
-## Collect all metadata from EnsDb sqlite files located in a specific folder.
-sqliteUrl <- "/Users/jo/Projects/EnsDbs/"
+## 1) Create a local folder with a subfolder named according to the Ensembl
+##    version.
+## 2) Copy all EnsDb*.sqlite files from the respective Ensembl version into that
+##    folder.
+## 3) Amend the `ensemblVersion` and `baseDir` variables to point to that folder.
+
+## ensemblVersion: the Ensembl version
+ensemblVersion <- 87
+
+## baseDir amend the base path to local directory. The default settings point
+## to a base folder "EnsDbs" located in the same directory than the AHEnsDbs.
+baseDir <- paste0("../../../EnsDbs/", ensemblVersion, "/")
+
+
+## Start processing the data.
+fls <- dir(baseDir, full.names = TRUE, pattern = "^EnsDb(.*)sqlite$")
+if (length(fls) == 0)
+    stop("No EnsDb sqlite files found in folder ", normalizePath(baseDir),
+         ". Please adjust 'baseDir' to point to the directory containing ",
+         "these files.")
+
 require(ensembldb, quietly = TRUE)
 
 .formatOrgName <- function(x) {
@@ -10,17 +29,17 @@ require(ensembldb, quietly = TRUE)
 }
 
 .metadataForEnsDb <- function(x) {
+    message("Processing file ", basename(x), " ... ", appendLF = FALSE)
     mtd <- metadata(EnsDb(x))
     orgn <- .formatOrgName(mtd[mtd$name == "Organism", "value"])
     ever <- mtd[mtd$name == "ensembl_version", "value"]
     taxo <- mtd[mtd$name == "taxonomy_id", "value"]
-       vals <- data.frame(
-    ## vals <- AnnotationHubData::AnnotationHubMetadata(
+    vals <- data.frame(
         Title = paste0("Ensembl ", ever, " EnsDb for ", orgn),
         Description = paste0("Gene and protein annotations for ",
                              orgn, " based on Ensembl version ",
                              ever, "."),
-        BiocVersion = "3.4",
+        BiocVersion = "3.5",
         Genome = mtd[mtd$name == "genome_build", "value"],
         SourceType = "MySQL",
         SourceUrl = "http://www.ensembl.org",
@@ -32,18 +51,16 @@ require(ensembldb, quietly = TRUE)
         Maintainer = "Johannes Rainer <johannes.rainer@eurac.edu>",
         RDataClass = "SQLiteFile",
         DispatchClass = "EnsDb",
-        ## RDataDateAdded = as.POSIXct(Sys.time()),
         ResourceName = basename(x),
-        Recipe = NA_character_,
-        Tags = I(list(c("EnsDb", "Ensembl", "Gene", "Transcript",
-                        "Protein", "Annotation", ever)))
+        Tags = paste0("EnsDb:Ensembl:Gene:Transcript:Protein:Annotation:", ever)
     )
+    message("OK")
     return(vals)
 }
 
-fls <- dir(sqliteUrl, full.names = TRUE, pattern = "^EnsDb(.*)sqlite$")
 
 meta <- lapply(fls, FUN = .metadataForEnsDb)
 meta <- do.call(rbind, meta)
 
-write.csv(meta, file="../extdata/metadata.csv", row.names=FALSE)
+write.csv(meta, file = paste0("../extdata/metadata_v", ensemblVersion, ".csv"),
+          row.names = FALSE)
