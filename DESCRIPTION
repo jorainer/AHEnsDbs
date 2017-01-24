@@ -6,7 +6,7 @@ Encoding: UTF-8
 Author: Johannes Rainer
 Maintainer: Johannes Rainer <johannes.rainer@eurac.edu>
 Depends: R (>= 3.2.2), methods, ensembldb
-Imports: AnnotationHubData
+Imports: AnnotationHubData (>= 1.5.24)
 Description: Supplies AnnotationHub with EnsDb Ensembl-based annotation
 	     databases for all species. EnsDb SQLite databases are generated
 	     separately from Ensembl MySQL databases using functions from the

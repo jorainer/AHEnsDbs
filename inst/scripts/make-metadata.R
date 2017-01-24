@@ -41,7 +41,8 @@ require(ensembldb, quietly = TRUE)
                              ever, "."),
         BiocVersion = "3.5",
         Genome = mtd[mtd$name == "genome_build", "value"],
-        SourceType = "MySQL",
+        ## SourceType = "ensembl:MySQL",
+        SourceType = "ensembl",
         SourceUrl = "http://www.ensembl.org",
         SourceVersion = ever,
         Species = orgn,
@@ -64,3 +65,7 @@ meta <- do.call(rbind, meta)
 
 write.csv(meta, file = paste0("../extdata/metadata_v", ensemblVersion, ".csv"),
           row.names = FALSE)
+
+## To check the metadata:
+## library(AnnotationHubData)
+## Test <- AnnotationHubData::makeAnnotationHubMetadata("AHEnsDbs")
