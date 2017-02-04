@@ -1,16 +1,19 @@
 Package: AHEnsDbs
 Type: Package
 Title: EnsDbs for AnnotationHub
-Version: 0.99.3
+Version: 0.99.4
 Encoding: UTF-8
 Author: Johannes Rainer
 Maintainer: Johannes Rainer <johannes.rainer@eurac.edu>
 Depends: R (>= 3.2.2), methods, ensembldb
 Imports: AnnotationHubData (>= 1.5.24)
+Suggests: BiocStyle,
+	  knitr
 Description: Supplies AnnotationHub with EnsDb Ensembl-based annotation
 	     databases for all species. EnsDb SQLite databases are generated
 	     separately from Ensembl MySQL databases using functions from the
 	     ensembldb package employing the Ensembl Perl API.
+VignetteBuilder: knitr
 License: Artistic-2.0
 LazyLoad: yes
 biocViews: DataImport

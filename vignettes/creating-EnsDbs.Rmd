@@ -1,0 +1,83 @@
+---
+title: "Creating EnsDbs for a given Ensembl release"
+author: "Johannes Rainer"
+graphics: no
+package: AHEnsDbs
+output:
+  BiocStyle::html_document2:
+    toc_float: true
+vignette: >
+  %\VignetteIndexEntry{Creating EnsDbs for a given Ensembl release}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{ensembldb}
+---
+
+
+# Creating EnsDbs for a given Ensembl release
+
+This document describes the (semi)-automated way to create `ensembldb` `EnsDb`
+SQLite annotation databases using the Ensembl Perl API and the MySQL database
+dumps from Ensembl.
+
+## Requirements
+
++ Perl.
++ Ensembl Perl API corresponding to the version for which the databases should
+  be created. See http://www.ensembl.org/info/docs/api/api_installation.html for
+  more details.
++ BioPerl.
++ MySQL server with access credentials allowing to create databases and insert
+  data.
+  
+## Creating `EnsDb` SQLite databases
+
+To create the databases we are sequentially downloading and installing the MySQL
+database dumps from Ensembl locally and query these local databases to extract
+the annotations that will be inserted into the final SQLite databases. While it
+would be possible to directly query the Ensembl databases using the Perl API,
+this has proven to be slower and frequently fails due to access shortages or
+time outs.
+
+Below we load the `ensembldb` package and the *generate-EnsDbs.R* script in its
+*scripts* folder.
+
+```{r load-lib, eval = FALSE}
+library(ensembldb)
+
+scr <- system.file("scripts/generate-EnsDbs.R", package = "ensembldb")
+source(scr)
+
+```
+
+We next use the `createEnsDbForSpecies` function. This function queries first
+the Ensembl ftp server to list all species for a certain Ensembl release. By
+default it will then process all species, by first downloading the MySQL
+database dumps, installing it into a local MySQL server and subsequently, using
+functionality from the `ensembldb` package and the Ensembl Perl API, exctracting
+all annotations from it and storing it to a SQLite datababse. The local MySQL
+database will then by default deleted (setting the parameter `dropDb = FALSE`
+does not delete the databases).
+
+Important parameter to set in the function are:
++ `ftp_folder`: by default the main Ensembl ftp server will be queried
+  (ftp://ftp.ensembl.org/pub), alternatively, also the Ensemblgenomes database
+  can be queried. To build e.g. `EnsDb`s for all plants use
+  ftp://ftp.ensemblgenomes.org/pub/release-34/plants/mysql. If this parameter
+  is defined it has to point to the directory in which all MySQL database dumps
+  can be found.
++ `ens_version`: the Ensembl version (e.g. `87`).
++ `user`: the user name for the **local** MySQL database.
++ `host`: the hostname of the local MySQL database (e.g. `"localhost"`).
++ `pass`: the password for the local MySQL database.
+
+Below we create all `EnsDb` databases for Ensembl release 87. Note that we have
+to have installed the Ensembl Perl API matching this release.
+
+```{r create-dbs, eval = FALSE}
+createEnsDbForSpecies(ens_version = 87, user = "someuser", host = "localhost",
+                      pass = "somepass")
+```
+
+All SQLite database, one per species, will be stored in the current working
+directory.
