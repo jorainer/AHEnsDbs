@@ -1,11 +1,11 @@
 Package: AHEnsDbs
 Type: Package
 Title: EnsDbs for AnnotationHub
-Version: 0.99.5
+Version: 0.99.6
 Encoding: UTF-8
 Author: Johannes Rainer
 Maintainer: Johannes Rainer <johannes.rainer@eurac.edu>
-Depends: R (>= 3.2.2), methods, ensembldb
+Depends: R (>= 3.4), methods, ensembldb (>= 1.99.10)
 Imports: AnnotationHubData (>= 1.5.24)
 Suggests: BiocStyle,
 	  knitr
@@ -16,4 +16,5 @@ Description: Supplies AnnotationHub with EnsDb Ensembl-based annotation
 VignetteBuilder: knitr
 License: Artistic-2.0
 LazyLoad: yes
-biocViews: DataImport
+biocViews: DataImport, Sequencing, Coverage
+

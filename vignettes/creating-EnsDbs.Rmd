@@ -4,13 +4,13 @@ author: "Johannes Rainer"
 graphics: no
 package: AHEnsDbs
 output:
-  BiocStyle::html_document2:
-    toc_float: true
+    BiocStyle::html_document2:
+      toc_float: true
 vignette: >
-  %\VignetteIndexEntry{Creating EnsDbs for a given Ensembl release}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
-  %\VignetteDepends{ensembldb}
+    %\VignetteIndexEntry{Creating EnsDbs for a given Ensembl release}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
+    %\VignetteDepends{ensembldb}
 ---
 
 
