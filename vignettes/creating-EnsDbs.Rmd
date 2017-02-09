@@ -1,5 +1,5 @@
 ---
-title: "Creating EnsDbs for a given Ensembl release"
+title: "Provide EnsDb databases for AnnotationHub"
 author: "Johannes Rainer"
 graphics: no
 package: AHEnsDbs
@@ -7,16 +7,54 @@ output:
     BiocStyle::html_document2:
       toc_float: true
 vignette: >
-    %\VignetteIndexEntry{Creating EnsDbs for a given Ensembl release}
+    %\VignetteIndexEntry{Provide EnsDb databases for AnnotationHub}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
-    %\VignetteDepends{ensembldb}
+    %\VignetteDepends{ensembldb,AnnotationHub}
 ---
+
+```{r style, echo = FALSE, results = 'asis', message=FALSE}
+BiocStyle::markdown()
+```
+
+**Authors**: `r packageDescription("AHEnsDbs")[["Author"]] `<br />
+**Last modified:** `r file.info("creating-EnsDbs.Rmd")$mtime`<br />
+**Compiled**: `r date()`
+
+# Fetch `EnsDb` databases from `AnnotationHub`
+
+The `AHEnsDbs` package provides the metadata for all `EnsDb` SQLite databases in
+`r Biocpkg("AnnotationHub")`. First we load/update the `AnnotationHub` resource.
+
+```{r load-lib, message = FALSE}
+library(AnnotationHub)
+ah <- AnnotationHub()
+
+```
+
+Next we list all `EnsDb` entries from `AnnotationHub`.
+
+```{r list-ensdb}
+query(ah, "EnsDb")
+```
+
+We fetch the `EnsDb` for species *Ciona Intestinalis* and ensembl release 87.
+
+```{r load-ensdb}
+qr <- query(ah, c("EnsDb", "intestinalis", "87"))
+edb <- qr[[1]]
+```
+
+To get the genes defined for this species we can simply call.
+
+```{r get-genes}
+genes(edb)
+```
 
 
 # Creating EnsDbs for a given Ensembl release
 
-This document describes the (semi)-automated way to create `ensembldb` `EnsDb`
+This section describes the (semi)-automated way to create `ensembldb` `EnsDb`
 SQLite annotation databases using the Ensembl Perl API and the MySQL database
 dumps from Ensembl.
 
@@ -42,7 +80,7 @@ time outs.
 Below we load the `ensembldb` package and the *generate-EnsDbs.R* script in its
 *scripts* folder.
 
-```{r load-lib, eval = FALSE}
+```{r load-lib2, eval = FALSE}
 library(ensembldb)
 
 scr <- system.file("scripts/generate-EnsDbs.R", package = "ensembldb")
