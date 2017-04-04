@@ -53,7 +53,7 @@ require(ensembldb, quietly = TRUE)
         RDataClass = "EnsDb",
         DispatchClass = "EnsDb",
         Location_Prefix = "http://s3.amazonaws.com/annotationhub/",
-        RDataPath = paste0("AHEnsDbs/v87/", basename(x)),
+        RDataPath = paste0("AHEnsDbs/v", ensemblVersion, "/", basename(x)),
         ResourceName = basename(x),
         Tags = paste0("EnsDb:Ensembl:Gene:Transcript:Protein:Annotation:", ever)
     )
