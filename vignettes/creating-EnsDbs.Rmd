@@ -4,7 +4,7 @@ author: "Johannes Rainer"
 graphics: no
 package: AHEnsDbs
 output:
-    BiocStyle::html_document2:
+    BiocStyle::html_document:
       toc_float: true
 vignette: >
     %\VignetteIndexEntry{Provide EnsDb databases for AnnotationHub}
