@@ -5,11 +5,11 @@
 ## 3) Amend the `ensemblVersion` and `baseDir` variables to point to that folder.
 
 ## ensemblVersion: the Ensembl version
-ensemblVersion <- 90
+ensemblVersion <- 92
 
 ## baseDir amend the base path to local directory. The default settings point
 ## to a base folder "EnsDbs" located in the same directory than the AHEnsDbs.
-baseDir <- paste0("../../../../EnsDbs/", ensemblVersion, "/")
+baseDir <- paste0("../../../../../EnsDbs/", ensemblVersion, "/")
 
 
 ## Start processing the data.
@@ -39,7 +39,7 @@ require(ensembldb, quietly = TRUE)
         Description = paste0("Gene and protein annotations for ",
                              orgn, " based on Ensembl version ",
                              ever, "."),
-        BiocVersion = "3.5",
+        BiocVersion = "3.7",
         Genome = mtd[mtd$name == "genome_build", "value"],
         ## SourceType = "ensembl:MySQL",
         SourceType = "ensembl",
