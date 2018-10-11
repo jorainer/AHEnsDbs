@@ -17,5 +17,5 @@ Description: Supplies AnnotationHub with EnsDb Ensembl-based annotation
 VignetteBuilder: knitr
 License: Artistic-2.0
 LazyLoad: yes
-biocViews: DataImport, Sequencing, Coverage
+biocViews: DataImport, Sequencing, Coverage, AnnotationHub
 

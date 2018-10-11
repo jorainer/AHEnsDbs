@@ -6,6 +6,7 @@
 
 ## ensemblVersion: the Ensembl version
 ensemblVersion <- 94
+biocVersion <- "3.8"
 
 ## baseDir amend the base path to local directory. The default settings point
 ## to a base folder "EnsDbs" located in the same directory than the AHEnsDbs.
@@ -23,7 +24,7 @@ require(ensembldb, quietly = TRUE)
 
 .formatOrgName <- function(x) {
     x <- gsub(x, pattern = "_", replacement = " ", fixed = TRUE)
-    x <- gsub(x ,pattern = "(^|[[:space:]])([[:alpha:]])",
+    x <- sub(x, pattern = "(^|[[:space:]])([[:alpha:]])",
               replacement = "\\1\\U\\2", perl=TRUE)
     return(x)
 }
@@ -39,7 +40,7 @@ require(ensembldb, quietly = TRUE)
         Description = paste0("Gene and protein annotations for ",
                              orgn, " based on Ensembl version ",
                              ever, "."),
-        BiocVersion = "3.7",
+        BiocVersion = biocVersion,
         Genome = mtd[mtd$name == "genome_build", "value"],
         ## SourceType = "ensembl:MySQL",
         SourceType = "ensembl",
@@ -71,3 +72,18 @@ write.csv(meta, file = paste0("../extdata/metadata_v", ensemblVersion, ".csv"),
 ## To check the metadata:
 ## library(AnnotationHubData)
 ## Test <- AnnotationHubData::makeAnnotationHubMetadata("AHEnsDbs")
+
+#' Fix the organism name in a metadata csv file.
+fix_metadata_organism <- function(x) {
+    meta <- read.csv(x)
+    meta[, "Species"] <- sub("([[:space:]])([[:alpha:]])",
+                             replacement = "\\1\\L\\2",
+                             meta[, "Species"], perl = TRUE)
+    meta[, "Title"] <- 
+        sub("((for[[:space:]][[:alpha:]]*[[:space:]])([[:alpha:]]))",
+            "\\2\\L\\3", meta[, "Title"], perl = TRUE)
+    meta[, "Description"] <- 
+        sub("((for[[:space:]][[:alpha:]]*[[:space:]])([[:alpha:]]))",
+            "\\2\\L\\3", meta[, "Description"], perl = TRUE)
+    write.csv(meta, file = x, row.names = FALSE)
+}
