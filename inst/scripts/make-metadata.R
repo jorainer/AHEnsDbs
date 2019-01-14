@@ -5,7 +5,7 @@
 ## 3) Amend the `ensemblVersion` and `baseDir` variables to point to that folder.
 
 ## ensemblVersion: the Ensembl version
-ensemblVersion <- 94
+ensemblVersion <- 95
 biocVersion <- "3.8"
 
 ## baseDir amend the base path to local directory. The default settings point
