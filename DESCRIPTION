@@ -1,7 +1,7 @@
 Package: AHEnsDbs
 Type: Package
 Title: EnsDbs for AnnotationHub
-Version: 1.0.15
+Version: 1.0.16
 Encoding: UTF-8
 Author: Johannes Rainer
 Maintainer: Johannes Rainer <johannes.rainer@eurac.edu>
