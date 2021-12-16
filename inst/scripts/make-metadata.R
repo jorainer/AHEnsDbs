@@ -5,8 +5,8 @@
 ## 3) Amend the `ensemblVersion` and `baseDir` variables to point to that folder.
 
 ## ensemblVersion: the Ensembl version
-ensemblVersion <- 104
-biocVersion <- "3.13"
+ensemblVersion <- 105
+biocVersion <- "3.14"
 
 ## baseDir amend the base path to local directory. The default settings point
 ## to a base folder "EnsDbs" located in the same directory than the AHEnsDbs.
