@@ -6,7 +6,7 @@
 
 ## ensemblVersion: the Ensembl version
 ensemblVersion <- 106
-biocVersion <- "3.14"
+biocVersion <- "3.15"
 
 ## baseDir amend the base path to local directory. The default settings point
 ## to a base folder "EnsDbs" located in the same directory than the AHEnsDbs.
