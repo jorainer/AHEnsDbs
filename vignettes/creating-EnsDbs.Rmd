@@ -83,7 +83,7 @@ Below we load the `ensembldb` package and the *generate-EnsDbs.R* script in its
 ```{r load-lib2, eval = FALSE}
 library(ensembldb)
 
-scr <- system.file("scripts/generate-EnsDbs.R", package = "ensembldb")
+scr <- system.file("scripts/generate-EnsDBs.R", package = "ensembldb")
 source(scr)
 
 ```
